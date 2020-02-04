@@ -18,6 +18,11 @@ let holeImage; //fotka piczy
 let badholeImage; // fotka papryki
 
 function start() {
+    let spawn = new Spawn();
+    let controls = new Controls()
+
+    document.querySelector('#play').addEventListener('click', () => controls.playGame())
+
     canvas = document.getElementById("canvas"); //canvasik
     context = canvas.getContext("2d"); //kontekst
     canvas.width = window.innerWidth;
@@ -25,147 +30,86 @@ function start() {
     document.getElementById("timer").style.fontSize =
         window.innerHeight * 0.08 + "px";
 
-    initGame(); //czyści plansze
-    initHole();
-    initBadHole();
-    initBall();
-    changeGameState();
+    spawn.initGame(); //czyści plansze
+    spawn.initHole();
+    spawn.initBadHole();
+    spawn.initBall();
+    controls.changeGameState();
 
     window.addEventListener(
         "deviceorientation",
-        handleOrientation,
+        onDeviceOrientationChange,
         false
     );
 }
 
-function handleOrientation(event) {
+function onDeviceOrientationChange(event) {
+    let draw = new Draw()
     if (game.state === 1) {
-        var gamma = event.gamma;
-        var beta = event.beta;
+        var shiftX = event.gamma;
+        var shiftY = event.beta;
+        switch (window.orientation) {
+            case 180:
+                shiftX *= -1;
+                shiftY *= -1;
+                break;
+            case 90:
+                var tmp = shiftX;
+                shiftX = shiftY;
+                shiftY = -tmp;
+                break;
+            case -90:
+                var tmp = shiftX;
+                shiftX = -shiftY;
+                shiftY = tmp;
+                break;
+        }
 
-        ball.x += gamma;
-        ball.y += beta;
+        ball.x += shiftX;
+        ball.y += shiftY;
 
         context.clearRect(0, 0, canvas.width, canvas.height);
-        drawHole();
-        drawBadHole();
-        drawBall();
+        draw.drawHole();
+        draw.drawBadHole();
+        draw.drawBall();
     }
-}
-
-function initGame() {
-    clearGame();
-}
-
-// no to czyści plansze i rysuje balle i halle na nowo
-//zeruje czas
-//ale ta game no nwm
-//ma state bo można pausować i zatrzymywać
-// a to pierwsze to klasyczny czas w grze
-function clearGame() {
-    game = {
-        speed: 1000 / TIMER_SPEED,
-        timepassed: 0,
-        state: 0
-    };
-    initBall();
-    initHole();
-    initBadHole();
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    refreshTimer();
 }
 
 function ballSize() {
     return canvas.width > canvas.height ? canvas.height / 10 : canvas.width / 10;
 }
 
-function initBall() {
-    ball = {
-        size: ballSize(),
-        radius: ballSize() / 2,
-        x: ballSize() / 2 + Math.random() * (canvas.width - ballSize() / 2),
-        y: ballSize() / 2 + Math.random() * (canvas.height - ballSize() / 2)
-    };
-
-    ballImage = new Image();
-    ballImage.src = "img/ball.png";
-}
-
-//tworzenie dziury
-//bierzemy size naszego bakłażana i na tej podstawie tworzymy dziurę
-function initHole() {
-    hole = {
-        size: ballSize() * 1.3,
-        radius: (ballSize() * 1.3) / 2,
-        x: ballSize() + Math.random() * (canvas.width - ballSize()),
-        y: ballSize() + Math.random() * (canvas.height - ballSize()),
-        difficulty: HOLE_DIFFICULTY
-    };
-
-    holeImage = new Image();
-    holeImage.src = "img/hole.png";
-}
-
-function initBadHole() {
-    badhole = {
-        size: ballSize(),
-        radius: ballSize(),
-        x: ballSize() + Math.random() * (canvas.width - ballSize()),
-        y: ballSize() + Math.random() * (canvas.height - ballSize())
-    };
-
-    badholeImage = new Image();
-    badholeImage.src = "img/badhole.png";
-}
-
-function createalert() {
-    var alert = document.createElement('div')
-    alert.id = "alertfinish"
-    alert.innerHtml = "Congratulations!\nYou have finished the game in " +
-        msToTime(time)
-    alert.style.background = "black"
-    alert.appendChild(window)
-    console.log(alert)
-}
-
-
-
 function loop() {
     if (ballInHole()) {
         var time = game.timepassed;
         stopGame();
-        var alert = document.createElement('div')
-        alert.id = "alertfinish"
-        alert.innerHtml = "Congratulations!\nYou have finished the game in " +
-            msToTime(time)
-        alert.style.background = "black"
-        window.appendChild(alert)
-        console.log(alert)
+        var name = prompt(
+            "Congratulations!\nYou have finished the game in " +
+            msToTime(time) +
+            "!\n\nPlease type in your name:"
+        );
+        if (name.length > 0) {
+            var chars =
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var prefix = "";
+            for (var i = 0; i < PREFIX_LENGTH; i++)
+                prefix += chars.charAt(Math.floor(Math.random() * chars.length));
 
-        // var name = prompt(
-        //   "Congratulations!\nYou have finished the game in " +
-        //     msToTime(time) +
-        //     "!\n\nPlease type in your name:"
-        // );
-        // if (name.length > 0) {
-        //   var chars =
-        //     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        //   var prefix = "";
-        //   for (var i = 0; i < PREFIX_LENGTH; i++)
-        //     prefix += chars.charAt(Math.floor(Math.random() * chars.length));
-
-        //   setCookie(prefix + name, "" + time, 365 * 100);
-    } else if (ballInBadHole()) {
-        stopGame();
-        alert("GAMEOVER!");
-        refreshTimer();
+            setCookie(prefix + name, "" + time, 365 * 100);
+        }
     }
-
 
     game.timepassed += game.speed;
     refreshTimer();
 }
 
+function badloop() {
+    if (ballInBadHole()) {
+        stopGame();
+        alert("GAMEOVER!");
+        refreshTimer();
+    }
+}
 
 function ballInHole() {
     var hminx = hole.x - hole.radius * hole.difficulty;
@@ -201,43 +145,6 @@ function refreshTimer() {
     document.getElementById("timer").innerHTML = msToTime(game.timepassed);
 }
 
-function drawBall() {
-    if (ball.x < ball.radius) ball.x = ball.radius;
-    else if (ball.x > canvas.width - ball.radius)
-        ball.x = canvas.width - ball.radius;
-    if (ball.y < ball.radius) ball.y = ball.radius;
-    else if (ball.y > canvas.height - ball.radius)
-        ball.y = canvas.height - ball.radius;
-
-    context.drawImage(
-        ballImage,
-        ball.x - ball.radius,
-        ball.y - ball.radius,
-        ball.size,
-        ball.size
-    );
-}
-
-function drawHole() {
-    context.drawImage(
-        holeImage,
-        hole.x - hole.radius * 2,
-        hole.y - hole.radius * 2,
-        hole.size,
-        hole.size
-    );
-}
-
-function drawBadHole() {
-    context.drawImage(
-        badholeImage,
-        badhole.x - badhole.radius * 2,
-        badhole.y - badhole.radius * 2,
-        badhole.size,
-        badhole.size
-    );
-}
-
 function getBounds() {
     return {
         minx: ball.x - ball.radius,
@@ -254,63 +161,7 @@ function hitTest(x, y) {
     );
 }
 
-function playGame() {
-    if (game.state !== 1) {
-        game.state = 1;
-        gameloop = setInterval(loop, game.speed);
-        // gamebadloop = setInterval(badloop, game.speed);
-        changeGameState();
-        drawHole();
-        drawBadHole();
-        drawBall();
-    }
-}
 
-function pauseGame() {
-    if (game.state === 1) {
-        game.state = 2;
-        clearInterval(gameloop);
-        changeGameState();
-    }
-}
-
-function stopGame() {
-    if (game.state !== 0) {
-        game.state = 0;
-        clearInterval(gameloop);
-        clearGame();
-        changeGameState();
-    }
-}
-
-function changeGameState() {
-    var start = document.getElementById("play");
-    var pause = document.getElementById("pause");
-    var stop = document.getElementById("stop");
-    switch (game.state) {
-        case 1:
-            {
-                start.style.opacity = "0.2";
-                pause.style.opacity = "1.0";
-                stop.style.opacity = "1.0";
-                break;
-            }
-        case 2:
-            {
-                start.style.opacity = "1.0";
-                pause.style.opacity = "0.2";
-                stop.style.opacity = "1.0";
-                break;
-            }
-        default:
-            {
-                start.style.opacity = "1.0";
-                pause.style.opacity = "0.2";
-                stop.style.opacity = "0.2";
-                break;
-            }
-    }
-}
 
 function msToTime(s) {
     var ms = s % 1000;
