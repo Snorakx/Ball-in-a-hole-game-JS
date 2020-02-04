@@ -125,6 +125,20 @@ function loop() {
         var name = createElement(div)
         name.innerHtml = "Congratulations!\nYou have finished the game in " +
             msToTime(time)
+        name.appendChild(window)
+            // var name = prompt(
+            //   "Congratulations!\nYou have finished the game in " +
+            //     msToTime(time) +
+            //     "!\n\nPlease type in your name:"
+            // );
+            // if (name.length > 0) {
+            //   var chars =
+            //     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            //   var prefix = "";
+            //   for (var i = 0; i < PREFIX_LENGTH; i++)
+            //     prefix += chars.charAt(Math.floor(Math.random() * chars.length));
+
+        //   setCookie(prefix + name, "" + time, 365 * 100);
     } else if (ballInBadHole()) {
         stopGame();
         alert("GAMEOVER!");
