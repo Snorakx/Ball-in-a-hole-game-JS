@@ -125,6 +125,7 @@ function loop() {
         var name = createElement(div)
         name.innerHtml = "Congratulations!\nYou have finished the game in " +
             msToTime(time)
+        name.style.background = "black"
         name.appendChild(window)
             // var name = prompt(
             //   "Congratulations!\nYou have finished the game in " +
