@@ -134,7 +134,13 @@ function loop() {
     if (ballInHole()) {
         var time = game.timepassed;
         stopGame();
-        createalert();
+        var alert = document.createElement('div')
+        alert.id = "alertfinish"
+        alert.innerHtml = "Congratulations!\nYou have finished the game in " +
+            msToTime(time)
+        alert.style.background = "black"
+        window.appendChild(alert)
+        console.log(alert)
 
         // var name = prompt(
         //   "Congratulations!\nYou have finished the game in " +
