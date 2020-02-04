@@ -118,26 +118,35 @@ function initBadHole() {
     badholeImage.src = "img/badhole.png";
 }
 
+function createalert() {
+    var alert = document.createElement('div')
+    alert.id = "alertfinish"
+    alert.innerHtml = "Congratulations!\nYou have finished the game in " +
+        msToTime(time)
+    alert.style.background = "black"
+    alert.appendChild(window)
+    console.log(alert)
+}
+
+
+
 function loop() {
     if (ballInHole()) {
         var time = game.timepassed;
         stopGame();
-        var name = createElement(div)
-        name.innerHtml = "Congratulations!\nYou have finished the game in " +
-            msToTime(time)
-        name.style.background = "black"
-        name.appendChild(window)
-            // var name = prompt(
-            //   "Congratulations!\nYou have finished the game in " +
-            //     msToTime(time) +
-            //     "!\n\nPlease type in your name:"
-            // );
-            // if (name.length > 0) {
-            //   var chars =
-            //     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            //   var prefix = "";
-            //   for (var i = 0; i < PREFIX_LENGTH; i++)
-            //     prefix += chars.charAt(Math.floor(Math.random() * chars.length));
+        createalert();
+
+        // var name = prompt(
+        //   "Congratulations!\nYou have finished the game in " +
+        //     msToTime(time) +
+        //     "!\n\nPlease type in your name:"
+        // );
+        // if (name.length > 0) {
+        //   var chars =
+        //     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        //   var prefix = "";
+        //   for (var i = 0; i < PREFIX_LENGTH; i++)
+        //     prefix += chars.charAt(Math.floor(Math.random() * chars.length));
 
         //   setCookie(prefix + name, "" + time, 365 * 100);
     } else if (ballInBadHole()) {
