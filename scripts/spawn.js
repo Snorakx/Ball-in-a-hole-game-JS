@@ -1,5 +1,6 @@
 class Spawn {
     constructor() {
+            this.gamerules = new GameRules()
 
         }
         // no to czyści plansze i rysuje balle i halle na nowo
@@ -8,28 +9,31 @@ class Spawn {
         //ma state bo można pausować i zatrzymywać
         // a to pierwsze to klasyczny czas w grze
     clearGame() {
-        let spawn = new Spawn()
+
 
         game = {
             speed: 1000 / TIMER_SPEED,
             timepassed: 0,
             state: 0
         };
-        spawn.initBall();
-        spawn.initHole();
-        spawn.initBadHole();
+        this.initBall();
+        this.initHole();
+        this.initBadHole();
         context.clearRect(0, 0, canvas.width, canvas.height);
-        refreshTimer();
+        this.gamerules.refreshTimer();
     }
     initGame() {
         this.clearGame()
     }
+    ballSize() {
+        return canvas.width > canvas.height ? canvas.height / 10 : canvas.width / 10;
+    }
     initBall() {
         ball = {
-            size: ballSize(),
-            radius: ballSize() / 2,
-            x: ballSize() / 2 + Math.random() * (canvas.width - ballSize() / 2),
-            y: ballSize() / 2 + Math.random() * (canvas.height - ballSize() / 2)
+            size: this.ballSize(),
+            radius: this.ballSize() / 2,
+            x: this.ballSize() / 2 + Math.random() * (canvas.width - this.ballSize() / 2),
+            y: this.ballSize() / 2 + Math.random() * (canvas.height - this.ballSize() / 2)
         };
 
         ballImage = new Image();
@@ -37,10 +41,10 @@ class Spawn {
     }
     initHole() {
         hole = {
-            size: ballSize() * 1.3,
-            radius: (ballSize() * 1.3) / 2,
-            x: ballSize() + Math.random() * (canvas.width - ballSize()),
-            y: ballSize() + Math.random() * (canvas.height - ballSize()),
+            size: this.ballSize() * 1.3,
+            radius: (this.ballSize() * 1.3) / 2,
+            x: this.ballSize() + Math.random() * (canvas.width - this.ballSize() / 2),
+            y: this.ballSize() + Math.random() * (canvas.height - this.ballSize() / 2),
             difficulty: HOLE_DIFFICULTY
         };
 
@@ -50,10 +54,10 @@ class Spawn {
 
     initBadHole() {
         badhole = {
-            size: ballSize(),
-            radius: ballSize(),
-            x: ballSize() + Math.random() * (canvas.width - ballSize()),
-            y: ballSize() + Math.random() * (canvas.height - ballSize())
+            size: this.ballSize(),
+            radius: this.ballSize(),
+            x: this.ballSize() + Math.random() * (canvas.width - this.ballSize() / 2),
+            y: this.ballSize() + Math.random() * (canvas.height - this.ballSize() / 2)
         };
 
         badholeImage = new Image();

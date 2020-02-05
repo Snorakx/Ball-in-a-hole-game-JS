@@ -1,16 +1,17 @@
 class Controls {
-    constructor(draw) {
-        draw = new Draw()
+    constructor() {
+        this.draw = new Draw()
+        this.spawn = new Spawn()
+        this.gamerules = new GameRules()
     }
     playGame() {
         if (game.state !== 1) {
             game.state = 1;
             gameloop = setInterval(loop, game.speed);
-            gamebadloop = setInterval(badloop, game.speed);
             this.changeGameState();
-            draw.drawHole();
-            draw.drawBadHole();
-            draw.drawBall();
+            this.draw.drawHole();
+            this.draw.drawBadHole();
+            this.draw.drawBall();
         }
     }
 
@@ -26,7 +27,7 @@ class Controls {
         if (game.state !== 0) {
             game.state = 0;
             clearInterval(gameloop);
-            clearGame();
+            this.spawn.clearGame();
             this.changeGameState();
         }
     }

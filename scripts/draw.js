@@ -1,6 +1,7 @@
 class Draw {
     constructor() {
 
+
     }
     drawBall() {
         if (ball.x < ball.radius) ball.x = ball.radius;
@@ -14,8 +15,8 @@ class Draw {
             ballImage,
             ball.x - ball.radius,
             ball.y - ball.radius,
-            ball.size,
-            ball.size
+            ball.size * 2,
+            ball.size * 2
         );
     }
 
@@ -24,8 +25,8 @@ class Draw {
             holeImage,
             hole.x - hole.radius,
             hole.y - hole.radius,
-            hole.size,
-            hole.size
+            hole.size * 1.5,
+            hole.size * 1.5
         );
     }
 
@@ -34,8 +35,8 @@ class Draw {
             badholeImage,
             badhole.x - badhole.radius,
             badhole.y - badhole.radius,
-            badhole.size,
-            badhole.size
+            badhole.size * 2,
+            badhole.size * 2
         );
     }
 }
