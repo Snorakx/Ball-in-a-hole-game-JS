@@ -26,7 +26,7 @@ class Spawn {
         this.clearGame()
     }
     ballSize() {
-        return canvas.width > canvas.height ? canvas.height / 10 : canvas.width / 10;
+        return canvas.width > canvas.height ? canvas.height / 8 : canvas.width / 8;
     }
     initBall() {
         ball = {
@@ -43,8 +43,8 @@ class Spawn {
         hole = {
             size: this.ballSize() * 1.3,
             radius: (this.ballSize() * 1.3) / 2,
-            x: this.ballSize() + Math.random() * (canvas.width - this.ballSize() / 2),
-            y: this.ballSize() + Math.random() * (canvas.height - this.ballSize() / 2),
+            x: this.ballSize() + Math.random() * (canvas.width - this.ballSize()),
+            y: this.ballSize() + Math.random() * (canvas.height - this.ballSize()),
             difficulty: HOLE_DIFFICULTY
         };
 
@@ -56,8 +56,8 @@ class Spawn {
         badhole = {
             size: this.ballSize(),
             radius: this.ballSize(),
-            x: this.ballSize() + Math.random() * (canvas.width - this.ballSize() / 2),
-            y: this.ballSize() + Math.random() * (canvas.height - this.ballSize() / 2)
+            x: this.ballSize() + Math.random() * (canvas.width - this.ballSize()),
+            y: this.ballSize() + Math.random() * (canvas.height - this.ballSize())
         };
 
         badholeImage = new Image();
