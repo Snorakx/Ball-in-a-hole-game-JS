@@ -1,13 +1,9 @@
 class Spawn {
     constructor() {
-            this.gamerules = new GameRules()
+        this.gamerules = new GameRules()
 
-        }
-        // no to czyści plansze i rysuje balle i halle na nowo
-        //zeruje czas
-        //ale ta game no nwm
-        //ma state bo można pausować i zatrzymywać
-        // a to pierwsze to klasyczny czas w grze
+    }
+
     clearGame() {
 
 

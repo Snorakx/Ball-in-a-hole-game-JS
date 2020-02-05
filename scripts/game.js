@@ -35,7 +35,18 @@ class GameRules {
     }
 
     refreshTimer() {
-        document.getElementById("timer").innerHTML = msToTime(game.timepassed);
+        document.getElementById("timer").innerHTML = this.msToTime(game.timepassed);
+    }
+
+    msToTime(s) {
+        var ms = s % 1000;
+        s = (s - ms) / 1000;
+        var secs = s % 60;
+        s = (s - secs) / 60;
+        var mins = s % 60;
+        secs = secs < 10 ? "0" + secs : secs;
+        mins = mins < 10 ? "0" + mins : mins;
+        return mins + ":" + secs + ":" + ms;
     }
 
 }
