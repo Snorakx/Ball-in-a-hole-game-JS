@@ -12,6 +12,7 @@ let ballImage;
 let holeImage;
 let badholeImage;
 
+
 function start() {
     let spawn = new Spawn();
     let controls = new Controls()
